@@ -109,3 +109,53 @@ textarea {
 .media-btn .material-icons {
   font-size: 2em;
 }
+.media-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.thumb-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #faf6fd;
+  border: 1px solid #eee;
+  border-radius: 9px;
+  min-width: 68px;
+  padding: 6px 7px 4px 7px;
+  position: relative;
+}
+
+.thumb-preview .material-icons {
+  cursor: pointer;
+  color: #ff5170;
+  font-size: 1.1em;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+.thumb-image {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 3px;
+  box-shadow: 0 1px 6px #f0e7fa;
+}
+
+.thumb-icon .material-icons {
+  font-size: 2.1em;
+  color: #b64bef;
+}
+
+.thumb-filename {
+  font-size: 0.83em;
+  margin-top: 3px;
+  word-break: break-all;
+  text-align: center;
+  max-width: 70px;
+  color: #a99ec4;
+}
