@@ -16,6 +16,7 @@ textarea {
   border: 1px solid #e0e0e0;
   padding: 10px;
   font-size: 1em;
+   min-height: 16em;
 }
 .media-buttons-row {
   display: flex;
@@ -76,4 +77,35 @@ textarea {
 .secondary-btn {
   background: transparent; border: none; color: #B64BEF; font-size: 1rem;
   border-radius: 16px; padding: 10px 28px;
+}
+.media-buttons-row {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 8px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.media-btn {
+  background: #f7f5fb;
+  border: none;
+  color: #B64BEF;
+  padding: 10px 8px 5px 8px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+  font-size: 1.08em;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.media-btn.recording,
+.media-btn:hover {
+  background: #e1c8f7;
+  color: #a03fd6;
+}
+.media-btn .material-icons {
+  font-size: 2em;
 }

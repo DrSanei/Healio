@@ -1,9 +1,9 @@
 import "../styles/Step1_PatientInfo.css";
 import { useState } from "react";
 import PersianDatePicker from "../components/PersianDatePicker";
+import FixedActionBar from "../components/FixedActionBar";
 
-export default function Step1_PatientInfo({ form, setForm, onNext }) {
-  const [errors, setErrors] = useState({});
+export default function Step1_PatientInfo({ form, setForm, onNext, onBack = () => {} }) {  const [errors, setErrors] = useState({});
 
   const validate = () => {
     let errs = {};
@@ -25,6 +25,7 @@ export default function Step1_PatientInfo({ form, setForm, onNext }) {
   };
 
   return (
+    <>
     <form className="step1-form" onSubmit={handleNext}>
       <div className="small-logo"><img src="/logo.png" alt="Healio" /></div>
       <div className="form-group">
@@ -70,7 +71,8 @@ export default function Step1_PatientInfo({ form, setForm, onNext }) {
         </select>
         {errors.doctorId && <div className="error">{errors.doctorId}</div>}
       </div>
-      <button type="submit" className="primary-btn">ادامه</button>
     </form>
-  );
+     <FixedActionBar onBack={onBack} onNext={handleNext} />
+    </>
+     );
 }

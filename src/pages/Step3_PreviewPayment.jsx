@@ -1,4 +1,6 @@
 import "../styles/Step3_PreviewPayment.css";
+import FixedActionBar from "../components/FixedActionBar";
+
 
 export default function Step3_PreviewPayment({ form, onNext, onBack }) {
   const handleEdit = onBack;
@@ -44,5 +46,6 @@ export default function Step3_PreviewPayment({ form, onNext, onBack }) {
       </div>
       <button className="primary-btn" onClick={handlePay}>پرداخت</button>
     </div>
+    
   );
 }
