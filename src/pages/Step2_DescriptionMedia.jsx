@@ -80,7 +80,17 @@ export default function Step2_DescriptionMedia({ form, setForm, onNext, onBack }
             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
           />
         </div>
-        <div className="media-buttons-row">
+        <div className="media-buttons-row">       
+          {/* Attach file Button */}
+          <button
+            type="button"
+            className="media-btn"
+            title="پیوست فایل"
+            onClick={handleAttachClick}
+          >
+            <span className="material-icons">attach_file</span>
+            <span style={{ fontSize: "0.85em" }}>فایل</span>
+          </button>
           {/* Camera Button */}
           <button
             type="button"
@@ -103,16 +113,7 @@ export default function Step2_DescriptionMedia({ form, setForm, onNext, onBack }
             </span>
             <span style={{ fontSize: "0.85em" }}>{recording ? "پایان ضبط" : "ضبط صدا"}</span>
           </button>
-          {/* Attach file Button */}
-          <button
-            type="button"
-            className="media-btn"
-            title="پیوست فایل"
-            onClick={handleAttachClick}
-          >
-            <span className="material-icons">attach_file</span>
-            <span style={{ fontSize: "0.85em" }}>فایل</span>
-          </button>
+         
           {/* Hidden file input */}
           <input
             type="file"
