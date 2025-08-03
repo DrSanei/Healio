@@ -7,7 +7,9 @@ export default function Step4_PaymentRedirect({ onSuccess = () => {}, onFail = (
 
   useEffect(() => {
     // Simulate payment wait/fallback (replace with real ZarrinPal redirect)
-    const timeout = setTimeout(() => setWaiting(false), 120000);
+      const timeout = setTimeout(() => {
+    onSuccess(); // Go to /success
+  }, 2000);
     return () => clearTimeout(timeout);
   }, []);
 

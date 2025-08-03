@@ -16,7 +16,7 @@ export default function Step5_Success({ onHome }) {
       </div>
       <button className="primary-btn" onClick={onHome}>بازگشت به صفحه اصلی</button>
     </div>
-    <FixedActionBar onBack={onBack} onNext={onNext} />
+    {/*<FixedActionBar onBack={onBack} onNext={onNext} />*/}
         </>
   );
 }

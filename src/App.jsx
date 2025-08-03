@@ -65,7 +65,8 @@ function App() {
             />
           }
         />
-        <Route
+
+       <Route
           path="/step3"
           element={
             <Step3_PreviewPayment
@@ -76,6 +77,22 @@ function App() {
             />
           }
         />
+        // App.jsx (change only this part)
+         
+         
+         {/* <Route
+            path="/step3"
+            element={
+              <Step3_PreviewPayment
+                form={form}
+                setForm={setForm}
+                // 👇 Change from '/step4' to '/success'
+                onNext={() => navigate('/success')}
+                onBack={() => navigate('/step2')}
+              />
+            }
+          />*/}
+
         <Route
           path="/step4"
           element={

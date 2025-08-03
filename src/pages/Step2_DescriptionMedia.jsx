@@ -134,19 +134,21 @@ export default function Step2_DescriptionMedia({ form, setForm, onNext, onBack }
           />
         </div>
         <div className="media-buttons-row">
-          <button type="button" className="media-btn" title="دوربین" onClick={handleCamera}>
-            <span className="material-icons">photo_camera</span>
-            <span style={{ fontSize: "0.85em" }}>دوربین</span>
-          </button>
-          <button type="button" className={`media-btn ${recording ? "recording" : ""}`} title="ضبط صدا" onClick={handleAudioRecord}>
-            <span className="material-icons">{recording ? "stop_circle" : "mic"}</span>
-            <span style={{ fontSize: "0.85em" }}>{recording ? "پایان ضبط" : "ضبط صدا"}</span>
-          </button>
+        
           <button type="button" className="media-btn" title="پیوست فایل" onClick={handleAttachClick}>
             <span className="material-icons">attach_file</span>
             <span style={{ fontSize: "0.85em" }}>فایل</span>
           </button>
           <input type="file" multiple hidden ref={fileInput} onChange={addFile} />
+            <button type="button" className="media-btn" title="دوربین" onClick={handleCamera}>
+            <span className="material-icons">photo_camera</span>
+            <span style={{ fontSize: "0.85em" }}>دوربین</span>
+          </button>
+          
+          <button type="button" className={`media-btn ${recording ? "recording" : ""}`} title="ضبط صدا" onClick={handleAudioRecord}>
+            <span className="material-icons">{recording ? "stop_circle" : "mic"}</span>
+            <span style={{ fontSize: "0.85em" }}>{recording ? "پایان ضبط" : "ضبط صدا"}</span>
+          </button>
         </div>
         <div className="media-thumbs">
           {form.media?.map((file, idx) => (
