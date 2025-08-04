@@ -5,6 +5,7 @@ const authToken = '2fe04ed68d005cf37ca82dd993b30ae0';
 const client = twilio(accountSid, authToken);
 
 export default async function handler(req, res) {
+  console.log('Handler called! Method:', req.method, 'Body:', req.body);
   if (req.method !== "POST") {
     res.status(405).send("Method not allowed");
     return;
