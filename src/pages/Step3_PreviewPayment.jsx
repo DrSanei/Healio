@@ -75,6 +75,11 @@ export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) 
         const { tempPath, uniqueName } = form.mediaUploads[i];
         const newPath = `consultations/${consultationId}/${uniqueName}`;
         const file = form.media[i]; // This is just for file.type or original name display
+        console.log(
+          '[Move Attempt]',
+          'tempPath:', JSON.stringify(tempPath),
+          'exists in UI?', 'consultationId:', consultationId
+        );
 
         const { error: moveError } = await supabase.storage.from('media').move(tempPath, newPath);
         if (moveError) {
