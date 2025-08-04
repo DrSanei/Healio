@@ -19,7 +19,7 @@ export default function Step5_Success({ onHome, form }) {
       const files = form.mediaUrls || [];
 
       // 3. Send to backend API to trigger WhatsApp
-      await fetch("/api/whatsapp/send-to-doctor", {
+      await fetch("/api/send-to-doctor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

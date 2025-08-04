@@ -9,6 +9,9 @@ import Step4_PaymentRedirect from './pages/Step4_PaymentRedirect';
 import Step5_Success from './pages/Step5_Success';
 import './styles/variables.css';
 
+
+
+
 // Mapping pathname to step number for progress bar
 const pathStep = {
   '/step1': 1,
@@ -113,3 +116,5 @@ function App() {
 }
 
 export default App;
+
+
