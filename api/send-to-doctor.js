@@ -1,60 +1,46 @@
-"import { useEffect } from "react";
-import "../styles/Step5_Success.css";
-import FixedActionBar from "../components/FixedActionBar";
+// /api/send-to-doctor.js
 
-export default function Step5_Success({ onHome, form }) {
-  
-  useEffect(() => {
-    
-    async function sendToDoctor() {
-      // 1. Get doctor's WhatsApp number (replace this with real lookup, or hardcode for test)
-      let doctorNumber = "+989127619004"; // <--- hardcoded for test
-      
-      // If you want to fetch from backend by doctorId:
-      // doctorNumber = await fetch(`/api/doctor-whatsapp/${form.doctorId}`)
-      //   .then(res => res.json())
-      //   .then(data => data.whatsapp);
+import twilio from 'twilio';
 
-      // 2. Get file URLs (ensure you have URLs, not just file objects)
-      const files = form.mediaUrls || [];
+const accountSid = 'ACfe48996c2a9d2de5469abbf4f7bfb0b2';
+const authToken = '2fe04ed68d005cf37ca82dd993b30ae0';
+const client = twilio(accountSid, authToken);
 
-      // 3. Send to backend API to trigger WhatsApp
-      await fetch("/api/send-to-doctor", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          doctorNumber,
-          patient: {
-            firstName: form.firstName,
-            lastName: form.lastName,
-            mobile: form.mobile,
-            description: form.description,
-          },
-          files,
-        }),
+export default async function handler(req, res) {
+  try {
+    if (req.method !== "POST")
+      return res.status(405).json({ error: "Method not allowed" });
+
+    const { doctorNumber, patient, files } = req.body;
+
+    let body = `👤 مشاوره جدید:\n`;
+    body += `نام: ${patient.firstName} ${patient.lastName}\n`;
+    body += `شماره: ${patient.mobile}\n`;
+    body += `شرح بیماری:\n${patient.description}\n`;
+    if (files && files.length) {
+      body += '\nضمائم:\n';
+      files.forEach(url => {
+        body += url + '\n';
       });
     }
 
-    sendToDoctor();
-    // eslint-disable-next-line
-  }, [form]);
+    await client.messages.create({
+      from: 'whatsapp:+14155238886',
+      to: `whatsapp:${doctorNumber}`,
+      body,
+    });
 
-  return (
-    <>
-      <div className="success-page">
-        <div className="success-icon">
-          <span className="material-icons">check_circle</span>
-        </div>
-        <div className="success-message">
-          <p>پرونده شما جهت مشاوره با موفقیت به پزشک ارسال شد.</p>
-          <p>پاسخ مشاوره تا حداکثر ۲۴ ساعت آینده به واتساپ شما ارسال خواهد شد.</p>
-          <p>با سپاس از مشاوره شما با هیلیو.</p>
-        </div>
-        <button className="primary-btn" onClick={onHome}>
-          بازگشت به صفحه اصلی
-        </button>
-      </div>
-      {/* <FixedActionBar onBack={onBack} onNext={onNext} /> */}
-    </>
-  );
-} 
+    for (const url of files) {
+      await client.messages.create({
+        from: 'whatsapp:+14155238886',
+        to: `whatsapp:${doctorNumber}`,
+        mediaUrl: [url],
+      });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('API ERROR:', err);
+    res.status(500).json({ error: err.message });
+  }
+}
