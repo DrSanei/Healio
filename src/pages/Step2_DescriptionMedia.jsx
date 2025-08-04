@@ -59,62 +59,62 @@ export default function Step2_DescriptionMedia({ form, setForm, onNext, onBack }
     fileInput.current.click();
   };
 
-  const handleNext = async (e) => {
-    e.preventDefault();
-    if (form.media.length === 0) {
-      onNext();
-      return;
-    }
-
-    setIsUploading(true);
-    setUploadProgress(0);
-
-    // Define upload promises
-    const uploadPromises = form.media.map((file, index) => {
-      const uniqueName = `${Date.now()}_${index}_${file.name || 'file'}`;
-      const tempPath = `temp/${uniqueName}`;
-      return supabase.storage.from('media').upload(tempPath, file).then(({ data, error }) => {
-        if (error) {
-          console.error('Upload error:', error);
-          return null;
-        }
-        return tempPath;
-      });
-    });
-
-    // Start timer to increase progress by 2% every second
-    const intervalId = setInterval(() => {
-      setUploadProgress((prev) => {
-        const next = prev + 2;
-        return next < 100 ? next : 100;
-      });
-    }, 1000);
-
-    // Wait for all uploads to complete
-    const results = await Promise.all(uploadPromises);
-
-    // Clear the interval
-    clearInterval(intervalId);
-
-    // Set progress to 100%
-    setUploadProgress(100);
-
-    // Wait a bit for the progress bar to update
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Process results
-    const tempPaths = results.filter((path) => path !== null);
-    setForm((f) => ({ ...f, mediaTempPaths: tempPaths }));
-
-    // Proceed to next step
-    setIsUploading(false);
+ const handleNext = async (e) => {
+  e.preventDefault();
+  if (form.media.length === 0) {
     onNext();
-  };
+    return;
+  }
 
-  if (isUploading) {
+  setIsUploading(true);
+  setUploadProgress(0);
+
+  // Define upload promises with unique file names
+  const uploadPromises = form.media.map((file, index) => {
+    const uniqueName = `${Date.now()}_${index}_${file.name || 'file'}`;
+    const tempPath = `temp/${uniqueName}`;
+    return supabase.storage.from('media').upload(tempPath, file).then(({ data, error }) => {
+      if (error) {
+        console.error('Upload error:', error);
+        return null;
+      }
+      return { tempPath, uniqueName };
+    });
+  });
+
+  // Start timer to increase progress by 2% every second
+  const intervalId = setInterval(() => {
+    setUploadProgress((prev) => {
+      const next = prev + 2;
+      return next < 100 ? next : 100;
+    });
+  }, 1000);
+
+  // Wait for all uploads to complete (only ONCE!)
+  const results = await Promise.all(uploadPromises);
+
+  // Clear the interval
+  clearInterval(intervalId);
+
+  // Set progress to 100%
+  setUploadProgress(100);
+
+  // Wait a bit for the progress bar to update
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  // Save upload info to form (array of { tempPath, uniqueName })
+  const uploads = results.filter(Boolean);
+  setForm((f) => ({ ...f, mediaUploads: uploads }));
+
+  // Proceed to next step
+  setIsUploading(false);
+  onNext();
+};
+
+if (isUploading) {
     return (
       <div style={{ textAlign: 'center', margin: '32px auto' }}>
-        <p>در حال بارکزاری </p>
+        <p>در حال بارگزاری </p>
         <LoadingBar percent={uploadProgress} />
       </div>
     );

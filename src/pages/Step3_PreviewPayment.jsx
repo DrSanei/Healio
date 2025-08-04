@@ -69,35 +69,32 @@ export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) 
     }
 
     const consultationId = data.id;
-  if (form.mediaTempPaths && form.mediaTempPaths.length > 0) {
-  const fileUrls = [];
-  for (let i = 0; i < form.mediaTempPaths.length; i++) {
-    const tempPath = form.mediaTempPaths[i];
-    const file = form.media[i];
-    const fileName = file.name || `file_${i}`;
-    const newPath = `consultations/${consultationId}/${fileName}`;
-    const { error: moveError } = await supabase.storage.from('media').move(tempPath, newPath);
-    if (moveError) {
-      console.error('Move error:', moveError);
-      continue;
+    let fileUrls = [];
+    if (form.mediaUploads && form.mediaUploads.length > 0) {
+      for (let i = 0; i < form.mediaUploads.length; i++) {
+        const { tempPath, uniqueName } = form.mediaUploads[i];
+        const newPath = `consultations/${consultationId}/${uniqueName}`;
+        const file = form.media[i]; // This is just for file.type or original name display
+
+        const { error: moveError } = await supabase.storage.from('media').move(tempPath, newPath);
+        if (moveError) {
+          console.error('Move error:', moveError);
+          continue;
+        }
+        const { data: urlData } = supabase.storage.from('media').getPublicUrl(newPath);
+        const publicUrl = urlData.publicUrl;
+        fileUrls.push(publicUrl);
+
+        await supabase.from('media_files').insert([{
+          consultation_id: consultationId,
+          file_url: publicUrl,
+          file_type: file?.type || 'unknown',
+          file_name: file?.name || uniqueName
+        }]);
+      }
+      setForm(f => ({ ...f, mediaUrls: fileUrls }));
     }
-    const { data: urlData } = supabase.storage.from('media').getPublicUrl(newPath);
-    const publicUrl = urlData.publicUrl;
-    fileUrls.push(publicUrl); // Collect public URLs
-
-    await supabase.from('media_files').insert([{
-      consultation_id: consultationId,
-      file_url: publicUrl,
-      file_type: file.type || 'unknown',
-      file_name: fileName
-    }]);
-  }
-
-  // Add this line to set file URLs in the form state!
-  setForm(f => ({ ...f, mediaUrls: fileUrls }));
-}
-onNext();
-
+    onNext();
   }
 
   return (
