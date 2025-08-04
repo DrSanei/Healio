@@ -15,7 +15,7 @@ function jalaliToGregorian(dateString) {
   return `${gy}-${String(gm).padStart(2, '0')}-${String(gd).padStart(2, '0')}`;
 }
 
-export default function Step3_PreviewPayment({ form, onNext, onBack }) {
+export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) {
   const [doctorName, setDoctorName] = useState("نامشخص");
   const [doctors, setDoctors] = useState([]);
 

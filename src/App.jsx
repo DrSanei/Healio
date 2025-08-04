@@ -104,8 +104,8 @@ function App() {
           }
         />
         <Route
-          path="/success"
-          element={<Step5_Success onHome={() => navigate('/')} />}
+        path="/success"
+        element={<Step5_Success onHome={() => navigate('/')} form={form} />}
         />
       </Routes>
     </div>
