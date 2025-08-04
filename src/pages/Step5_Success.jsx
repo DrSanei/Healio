@@ -8,7 +8,7 @@ export default function Step5_Success({ onHome, form }) {
     
     async function sendToDoctor() {
       // 1. Get doctor's WhatsApp number (replace this with real lookup, or hardcode for test)
-      let doctorNumber = "+989127619004"; // <--- hardcoded for test
+      let doctorNumber = "+37455609789"; // <--- hardcoded for test
       
       // If you want to fetch from backend by doctorId:
       // doctorNumber = await fetch(`/api/doctor-whatsapp/${form.doctorId}`)
