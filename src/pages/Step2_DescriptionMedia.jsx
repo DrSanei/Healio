@@ -70,17 +70,20 @@ export default function Step2_DescriptionMedia({ form, setForm, onNext, onBack }
   setUploadProgress(0);
 
   // Define upload promises with unique file names
-  const uploadPromises = form.media.map((file, index) => {
-    const uniqueName = `${Date.now()}_${index}_${file.name || 'file'}`;
-    const tempPath = `temp/${uniqueName}`;
-    return supabase.storage.from('media').upload(tempPath, file).then(({ data, error }) => {
-      if (error) {
-        console.error('Upload error:', error);
-        return null;
-      }
-      return { tempPath, uniqueName };
-    });
+ const uploadPromises = form.media.map((file, index) => {
+  const randomId = Math.random().toString(36).slice(2, 10);
+  const uniqueName = `${Date.now()}_${randomId}_${file.name || 'file'}`;
+  const tempPath = `temp/${uniqueName}`;
+  return supabase.storage.from('media').upload(tempPath, file).then(({ data, error }) => {
+    if (error) {
+      console.error('Upload error:', error);
+      return null;
+    }
+    console.log('Uploaded:', tempPath, 'for', file.name || 'blob');
+    return { tempPath, uniqueName };
   });
+});
+
 
   // Start timer to increase progress by 2% every second
   const intervalId = setInterval(() => {
