@@ -11,5 +11,6 @@ export default function LoadingBar({ percent = 0 }) {
         }}
       />
     </div>
+    
   );
 }

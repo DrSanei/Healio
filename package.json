@@ -16,6 +16,7 @@
     "@mui/material": "^7.2.0",
     "@supabase/supabase-js": "^2.53.0",
     "jalaali-js": "^1.2.8",
+    "node-telegram-bot-api": "^0.66.0",
     "react": "^19.1.0",
     "react-date-object": "^2.1.9",
     "react-dom": "^19.1.0",

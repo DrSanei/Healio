@@ -15,6 +15,11 @@ function jalaliToGregorian(dateString) {
   return `${gy}-${String(gm).padStart(2, '0')}-${String(gd).padStart(2, '0')}`;
 }
 
+// --- ADDED: Generate a random unique code for the consultation ---
+function generateConsultCode() {
+  return 'consult-' + Math.random().toString(36).substr(2, 7);
+}
+
 export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) {
   const [doctorName, setDoctorName] = useState("نامشخص");
   const [doctors, setDoctors] = useState([]);
@@ -49,6 +54,17 @@ export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) 
       formattedBirthDate = form.birthDate;
     }
 
+    // --- ADDED: Generate unique code for this consult ---
+    const uniqueCode = generateConsultCode();
+
+    // --- Get doctor wa_number from loaded doctors list ---
+    let doctorMobile = "";
+    if (doctors.length > 0 && form.doctorId) {
+      const doc = doctors.find(d => d.id === form.doctorId);
+      if (doc && doc.wa_number) doctorMobile = doc.wa_number;
+    }
+
+    // --- Insert consult with unique_code ---
     const { data, error } = await supabase.from('consultations').insert([{
       first_name: form.firstName,
       last_name: form.lastName,
@@ -60,6 +76,7 @@ export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) 
       description: form.description,
       payment_status: 'pending',
       status: 'pending',
+      unique_code: uniqueCode,      // <<< new field
     }]).select().single();
 
     if (error) {
@@ -74,7 +91,7 @@ export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) 
       for (let i = 0; i < form.mediaUploads.length; i++) {
         const { tempPath, uniqueName } = form.mediaUploads[i];
         const newPath = `consultations/${consultationId}/${uniqueName}`;
-        const file = form.media[i]; // This is just for file.type or original name display
+        const file = form.media[i];
         console.log(
           '[Move Attempt]',
           'tempPath:', JSON.stringify(tempPath),
@@ -99,6 +116,25 @@ export default function Step3_PreviewPayment({ form, setForm, onNext, onBack }) 
       }
       setForm(f => ({ ...f, mediaUrls: fileUrls }));
     }
+
+    // --- ADDED: Send to backend to trigger Telegram/WhatsApp bot ---
+    // (Backend /api/send-to-doctor should use Telegram and include the code)
+    await fetch("/api/send-to-doctor", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        doctorNumber: doctorMobile,        // Use mobile number of doctor
+        patient: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          mobile: form.mobile,
+          description: form.description,
+        },
+        files: fileUrls,
+        uniqueCode, // Send the code so it can be included in the message
+      }),
+    });
+
     onNext();
   }
 
