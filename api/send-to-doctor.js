@@ -51,8 +51,20 @@ const sentMsg = await bot.sendMessage(doctorTelegramId, msg, { parse_mode: 'HTML
     // 4. Send documents if any
     if (files && files.length) {
       for (const url of files) {
-        await bot.sendDocument(doctorTelegramId, url);
-      }
+  try {
+    if (/\.(jpe?g|png)$/i.test(url)) {
+      await bot.sendPhoto(doctorTelegramId, url);
+    } else if (/\.(mp3|webm|ogg)$/i.test(url)) {
+      await bot.sendAudio(doctorTelegramId, url);
+    } else {
+      await bot.sendDocument(doctorTelegramId, url);
+    }
+  } catch (err) {
+    // fallback to just sending the link
+    await bot.sendMessage(doctorTelegramId, `ضمیمه مشاوره: ${url}`);
+  }
+}
+
     }
 
     // 5. Optionally: update consultations table with telegram_message_id and doctor_telegram
