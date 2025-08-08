@@ -9,14 +9,23 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Onboarding for doctors: Ask for their wa_number, then save user_id
 bot.onText(/\/start/, async (msg) => {
   const userId = msg.from.id;
   const chatId = msg.chat.id;
-  // Here you must associate this Telegram userId to a doctor or patient.
-  // For doctors: match by wa_number, or prompt user to enter their phone number
-  bot.sendMessage(chatId, 'سلام! ربات مشاوره هیلیو برای شما فعال شد. پزشک شما تا حدود 24 ساعت آینده به مشاوره شما پاسخ خواهد داد. با سپاس و آرزوی سلامتی برای شما.....');
+
+  bot.sendMessage(chatId, 'سلام! لطفا شماره موبایل (واتساپ) خود را جهت ثبت وارد کنید:');
+  bot.once('message', async (phoneMsg) => {
+    const phone = phoneMsg.text.trim();
+    await supabase
+      .from('doctors')
+      .update({ telegram_user_id: userId })
+      .eq('wa_number', phone);
+    bot.sendMessage(chatId, 'شماره شما ثبت و بات فعال شد. پزشک شما تا حدود 24 ساعت آینده به مشاوره شما پاسخ خواهد داد. با سپاس و آرزوی سلامتی برای شما.');
+  });
 });
- // Reply forwarding: Forward doctor's reply to patient
+
+// Reply forwarding: Forward doctor's reply to patient
 bot.on('message', async (msg) => {
   if (!msg.reply_to_message) return;
 
@@ -32,7 +41,6 @@ bot.on('message', async (msg) => {
     .single();
 
   if (error || !consult) {
-    // Optionally, try to parse unique_code from message text as backup
     return;
   }
 
