@@ -32,20 +32,20 @@ export default async function handler(req, res) {
     const doctorTelegramId = doctor.telegram_user_id;
 
     // 2. Compose the consultation message
-    let msg = `👤 *مشاوره جدید*\n`;
-    msg += `*نام:* ${patient.firstName} ${patient.lastName}\n`;
-    msg += `*شماره همراه:* ${patient.mobile}\n`;
-    msg += `*شرح بیماری:*\n${patient.description}\n`;
-    msg += `*کد مشاوره:* ${uniqueCode || ""}\n`;
-    if (files && files.length) {
-      msg += `\n*ضمائم:*\n`;
-      files.forEach(url => {
-        msg += url + '\n';
-      });
-    }
+let msg = `👤 <b>مشاوره جدید</b>\n`;
+msg += `<b>نام:</b> ${patient.firstName} ${patient.lastName}\n`;
+msg += `<b>شماره همراه:</b> ${patient.mobile}\n`;
+msg += `<b>شرح بیماری:</b>\n${patient.description}\n`;
+msg += `<b>کد مشاوره:</b> ${uniqueCode || ""}\n`;
+if (files && files.length) {
+  msg += `\n<b>ضمائم:</b>\n`;
+  files.forEach(url => {
+    msg += `<a href="${url}">${url}</a>\n`;
+  });
+}
 
     // 3. Send the message to doctor
-    const sentMsg = await bot.sendMessage(doctorTelegramId, msg, { parse_mode: 'Markdown' });
+const sentMsg = await bot.sendMessage(doctorTelegramId, msg, { parse_mode: 'HTML', disable_web_page_preview: false });
     const telegramMessageId = sentMsg.message_id;
 
     // 4. Send documents if any
