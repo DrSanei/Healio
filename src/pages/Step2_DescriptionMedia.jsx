@@ -88,7 +88,7 @@ export default function Step2_DescriptionMedia({ form, setForm, onNext, onBack }
   // Start timer to increase progress by 1% every second
   const intervalId = setInterval(() => {
     setUploadProgress((prev) => {
-      const next = prev + 2;
+      const next = prev + 1;
       return next < 100 ? next : 100;
     });
   }, 1000);

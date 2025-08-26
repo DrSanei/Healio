@@ -1,0 +1,33 @@
+---
+deployment:
+  tasks:
+    # Pick npm path that exists on your server:
+    - export NPM=/opt/cpanel/ea-nodejs20/bin/npm
+
+    # Clean & install
+    - /bin/rm -rf node_modules
+    - $NPM ci || $NPM install
+
+    # Build (Vite/CRA both use "build")
+    - $NPM run build
+
+    # Destination (folder already created in your File Manager)
+    - export PUBLIC=/home/painclin/public_html/healio
+    - /bin/mkdir -p $PUBLIC
+
+    # Vite:
+    - /bin/rsync -a --delete dist/ $PUBLIC/
+    # CRA (if you use Create React App, replace the previous line with this one):
+    # - /bin/rsync -a --delete build/ $PUBLIC/
+
+    # SPA routing
+    - /bin/cat > $PUBLIC/.htaccess <<'HTACC'
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /healio/
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /healio/index.html [L]
+</IfModule>
+HTACC
