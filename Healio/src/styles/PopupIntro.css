@@ -1,0 +1,21 @@
+.popup-intro-backdrop {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; z-index: 10;
+}
+.popup-intro {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 340px;
+  width: 90%;
+  padding: 32px 20px 20px 20px;
+  box-shadow: 0 4px 24px rgba(100,0,100,0.08);
+  font-family: 'IRANSans', Vazirmatn, Tahoma, Arial, sans-serif;
+  text-align: center;
+}
+.popup-intro h2 { color: #B64BEF; font-size: 1.2rem; margin-bottom: 16px; }
+.popup-intro button.primary {
+  background: #B64BEF; color: #fff; border: none; border-radius: 8px;
+  padding: 8px 28px; margin-top: 18px; font-size: 1rem; cursor: pointer;
+  transition: box-shadow 0.18s;
+}
+.popup-intro button.primary:hover { box-shadow: 0 2px 12px #B64BEF40; }

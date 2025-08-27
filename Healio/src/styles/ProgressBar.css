@@ -1,0 +1,102 @@
+:root {
+  --healio-purple: #B64BEF;
+  --gray-bg: #e0e0e0;
+}
+
+.progressbar-root {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 18px 0 12px 0;
+  font-family: "IRANSans", Vazirmatn, Tahoma, Arial, sans-serif;
+}
+
+.progressbar-steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  min-width: 0;
+}
+
+.progressbar-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-width: 60px;
+  z-index: 2;
+}
+
+.progressbar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gray-bg);
+  color: #fff;
+  line-height: 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 2px;
+  z-index: 2;
+  border: 2px solid #fff;
+  transition: background 0.22s;
+   text-align: center;
+   
+}
+
+.progressbar-circle.active,
+.progressbar-circle.completed {
+  background: var(--healio-purple);
+  color: #fff;
+}
+
+.progressbar-label {
+  margin-top: 3px;
+  font-size: 0.83rem;
+  color: #999;
+  white-space: nowrap;
+  text-align: center;
+}
+.progressbar-label.active,
+.progressbar-label.completed {
+  color: var(--healio-purple);
+  font-weight: bold;
+}
+
+/* The line starts from the edge of the current circle, ends at the next */
+.progressbar-connector {
+  position: absolute;
+  top: 30%;
+  left: calc(100% + 0px);  /* start just at the right edge of the circle */
+  transform: translateY(-50%);
+  width: calc(100% - 30px); /* full width minus one circle */
+  height: 3px;
+  background: var(--gray-bg);
+  z-index: 1;
+  border-radius: 2px;
+  /* RTL flip for Farsi/Persian */
+  right: unset;
+  left: calc(55% + 0px);
+}
+.progressbar-connector.filled {
+  background: var(--healio-purple);
+}
+
+/* Remove any line after the last circle! */
+.progressbar-step:last-child .progressbar-connector {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .progressbar-root {
+    padding: 10px 0 10px 0;
+  }
+  .progressbar-steps {
+    flex-wrap: wrap;
+  }
+  .progressbar-step .progressbar-label {
+    font-size: 0.74rem;
+  }
+}

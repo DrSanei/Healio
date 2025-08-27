@@ -1,0 +1,47 @@
+---
+deployment:
+  tasks:
+    - /bin/bash -lc '
+        set -e;
+        REPO="/home/painclin/repositories/Healio";
+        DOCROOT="/home/painclin/public_html/healio";
+        NPM="/opt/cpanel/ea-nodejs20/bin/npm";
+
+        cd "$REPO";
+
+        echo "== Install deps ==";
+        if [ -x "$NPM" ]; then
+          "$NPM" ci || "$NPM" install;
+        else
+          echo "ERROR: npm not found at $NPM"; exit 1;
+        fi
+
+        echo "== Build ==";
+        "$NPM" run build;
+
+        # Choose build dir (Vite=dist, CRA=build)
+        BUILT="";
+        [ -d "dist" ]  && BUILT="dist";
+        [ -z "$BUILT" ] && [ -d "build" ] && BUILT="build";
+        if [ -z "$BUILT" ]; then echo "ERROR: no dist/ or build/ found"; exit 1; fi
+
+        echo "== Publish to $DOCROOT ==";
+        /bin/rm -rf "$DOCROOT";
+        /bin/mkdir -p "$DOCROOT";
+        /bin/cp -a "$BUILT/." "$DOCROOT/";
+
+        echo "== Add .htaccess for SPA routing ==";
+        /bin/cat > "$DOCROOT/.htaccess" <<EOF
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /healio/
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /healio/index.html [L]
+</IfModule>
+EOF
+
+        /bin/date > "$DOCROOT/DEPLOY_OK.txt";
+        echo "== DONE (Healio) ==";
+      '
