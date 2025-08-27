@@ -1,4 +1,15 @@
 // pages/index.js
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/step1");
+  }, [router]);
+
+  return null; // no UI, just redirect
+
 export default function Home() {
   return (
     <div
