@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import PersianDatePicker from "../components/PersianDatePicker";
 import FixedActionBar from "../components/FixedActionBar";
 import { supabase } from '../supabaseClient';
+import { useNavigate } from "react-router-dom";
 
 export default function Step1_PatientInfo({ form, setForm, onNext, onBack = () => {} }) {
   const [errors, setErrors] = useState({});
@@ -39,6 +40,14 @@ export default function Step1_PatientInfo({ form, setForm, onNext, onBack = () =
     onNext();
   };
 
+  const navigate = useNavigate();
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  // ... your validation + saving logic
+  navigate("/step2"); // NEW step-2 page
+};
+
   return (
     <>
       <form className="step1-form" onSubmit={handleNext}>
@@ -73,7 +82,7 @@ export default function Step1_PatientInfo({ form, setForm, onNext, onBack = () =
           {errors.nationalCode && <div className="error">{errors.nationalCode}</div>}
         </div>
         <div className="form-group">
-          <label>شماره همراه (واتساپ)</label>
+          <label>شماره همراه </label>
           <input value={form.mobile} onChange={e => setForm(f => ({...f, mobile: e.target.value}))}/>
           {errors.mobile && <div className="error">{errors.mobile}</div>}
         </div>

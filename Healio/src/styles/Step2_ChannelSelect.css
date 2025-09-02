@@ -1,0 +1,51 @@
+/* src/styles/Step2_ChannelSelect.css */
+.step2-channel {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.step2-channel h1 {
+  font-size: 1.3em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.step2-channel .option-btn {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.option-telegram {
+  background-color: #229ED9;
+  color: white;
+}
+
+.option-whatsapp {
+  background-color: #25D366;
+  color: white;
+}
+
+.option-healio {
+  background-color: #E91E63;
+  color: white;
+}
+
+.step2-channel .back-btn {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #444;
+  cursor: pointer;
+}
