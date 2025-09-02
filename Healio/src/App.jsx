@@ -46,17 +46,17 @@ function App() {
       {showIntro && <PopupIntro onClose={() => setShowIntro(false)} />}
       <ProgressBar step={step} total={5} />
       <Routes>
-      - <Route path="/" element={<Navigate to="/step1" replace />} />
-      - <Route
-          -   path="/step1"
-          -   element={
-          -     <Step1_PatientInfo
-          -       form={form}
-          -       setForm={setForm}
-          -       onNext={() => navigate('/step2')}
-          -       onBack={() => navigate('/')} // Or just use () => {}
-          -     />}
-          - />
+        <Route path="/" element={<Navigate to="/step1" replace />} />
+<Route
+  path="/step1"
+  element={
+    <Step1_PatientInfo
+      form={form}
+      setForm={setForm}
+      onNext={() => navigate('/step2')}
+      onBack={() => navigate('/')} // Or just use () => {}
+    />}
+/>
         <Route
           path="/step2"
           element={

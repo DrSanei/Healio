@@ -3,8 +3,8 @@ import express from 'express';
 import twilio from 'twilio';
 const router = express.Router();
 
- const accountSid = 'ACfe48996c2a9d2de5469abbf4f7bfb0b2';
-const authToken = '2fe04ed68d005cf37ca82dd993b30ae0';
+ const accountSid = '';
+const authToken = '';
 const client = twilio(accountSid, authToken);
 
 router.post('/send-to-doctor', async (req, res) => {
